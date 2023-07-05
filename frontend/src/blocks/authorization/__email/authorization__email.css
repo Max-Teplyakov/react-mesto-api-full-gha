@@ -1,0 +1,19 @@
+.authorization__email {
+  width: 358px;
+  margin-bottom: 30px;
+  padding-bottom: 13px;
+  border: none;
+  background-color: black;
+  color: #fff;
+  border-bottom: 2px solid #ccc;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+}
+
+@media screen and (max-width: 900px) {
+  .authorization__email {
+    width: 260px;
+    margin-bottom: 30px;
+  }
+}

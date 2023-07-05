@@ -1,0 +1,7 @@
+@media screen and (max-width: 900px) {
+  .authorization__header {
+    padding: 34px 30px 28px;
+    font-size: 14px;
+    line-height: 17px;
+  }
+}

@@ -1,0 +1,28 @@
+.profile__avatar-edit {
+  position: relative;
+}
+.profile__avatar-edit::after {
+  content: "";
+  width: 120px;
+  height: 120px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.8);
+  background-image: url(../../../images/edit-avatar.png);
+  background-position: center;
+  background-size: 26px;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  z-index: -1;
+}
+
+.profile__avatar-edit:hover::after {
+  z-index: 2;
+}
+
+@media screen and (max-width: 653px) {
+  .profile__avatar-edit {
+    margin: 42px 0 26px;
+  }
+}
