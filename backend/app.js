@@ -3,17 +3,16 @@ const mongoose = require('mongoose');
 const { celebrate, Joi } = require('celebrate');
 const { errors } = require('celebrate');
 const NotFoundError = require('./errors/NotFoundError');
+const cors = require('cors');
 
 const app = express();
 
 const auth = require('./middlewares/auth');
 const routes = require('./routes/index');
-const {
-  createUser,
-  login,
-} = require('./controllers/users');
+const { createUser, login } = require('./controllers/users');
 
 const { PORT = 3000 } = process.env;
+app.use(cors());
 
 app.use(express.json());
 
@@ -25,23 +24,38 @@ mongoose
     console.log('connected bd');
   });
 
-app.post('/signin', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().pattern(/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+/),
-    password: Joi.string().required().min(8),
+app.post(
+  '/signin',
+  celebrate({
+    body: Joi.object().keys({
+      email: Joi.string()
+        .required()
+        .pattern(/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+/),
+      password: Joi.string().required().min(8),
+    }),
   }),
-}), login);
+  login,
+);
 
-app.post('/signup', celebrate({
-  body: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
-    about: Joi.string().min(2).max(30),
-    // eslint-disable-next-line no-useless-escape
-    avatar: Joi.string().pattern(/^https?:\/\/[\w\-\.\/~:\?\#\[\]@!$&'\(\)\*\+,;=]+[\-.\/~:\?\#\[\]@!$&'\\(\)\*\+,;=]{1}[\w\-\.\/~:\?\#\[\]@!$&'\(\)\*\+,;=]+[#\/]?$/),
-    email: Joi.string().required().pattern(/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+/),
-    password: Joi.string().required().min(8),
+app.post(
+  '/signup',
+  celebrate({
+    body: Joi.object().keys({
+      name: Joi.string().min(2).max(30),
+      about: Joi.string().min(2).max(30),
+      // eslint-disable-next-line no-useless-escape
+      avatar: Joi.string().pattern(
+        // eslint-disable-next-line no-useless-escape
+        /^https?:\/\/[\w\-\.\/~:\?\#\[\]@!$&'\(\)\*\+,;=]+[\-.\/~:\?\#\[\]@!$&'\\(\)\*\+,;=]{1}[\w\-\.\/~:\?\#\[\]@!$&'\(\)\*\+,;=]+[#\/]?$/,
+      ),
+      email: Joi.string()
+        .required()
+        .pattern(/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+/),
+      password: Joi.string().required().min(8),
+    }),
   }),
-}), createUser);
+  createUser,
+);
 
 app.use(auth);
 
@@ -55,14 +69,10 @@ app.use((err, req, res, next) => {
   // если у ошибки нет статуса, выставляем 500
   const { statusCode = 500, message } = err;
 
-  res
-    .status(statusCode)
-    .send({
-      // проверяем статус и выставляем сообщение в зависимости от него
-      message: statusCode === 500
-        ? 'На сервере произошла ошибка'
-        : message,
-    });
+  res.status(statusCode).send({
+    // проверяем статус и выставляем сообщение в зависимости от него
+    message: statusCode === 500 ? 'На сервере произошла ошибка' : message,
+  });
 });
 
 app.listen(PORT, () => {
