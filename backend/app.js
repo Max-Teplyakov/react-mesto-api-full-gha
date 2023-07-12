@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const { celebrate, Joi } = require('celebrate');
 const { errors } = require('celebrate');
+// eslint-disable-next-line import/no-extraneous-dependencies
 const cors = require('cors');
 const NotFoundError = require('./errors/NotFoundError');
 
@@ -17,7 +18,7 @@ app.use(cors());
 app.use(express.json());
 
 mongoose
-  .connect('mongodb://localhost:27017/mestodb', {
+  .connect('mongodb://127.0.0.1:27017/mestodb', {
     useNewUrlParser: true,
   })
   .then(() => {
