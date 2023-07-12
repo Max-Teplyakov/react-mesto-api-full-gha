@@ -46,7 +46,7 @@ module.exports.createUser = (req, res, next) => {
 };
 
 module.exports.getUsers = (req, res) => User.find({})
-  .then((user) => res.status(OK_SERVER).send({ data: user }))
+  .then((user) => res.status(OK_SERVER).send(user))
   .catch(() => res.status(ERROR_SERVER).send({ message: 'Error Server' }));
 
 module.exports.getUser = (req, res, next) => {
@@ -56,7 +56,7 @@ module.exports.getUser = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('User not found');
       }
-      res.status(OK_SERVER).send({ data: user });
+      res.status(OK_SERVER).send(user);
     })
     .catch(next);
 };
@@ -68,7 +68,7 @@ module.exports.getUsersId = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('User not found');
       }
-      res.status(OK_SERVER).send({ data: user });
+      res.status(OK_SERVER).send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -82,7 +82,7 @@ module.exports.updateProfileUser = (req, res, next) => {
   const userId = req.user._id;
   const { name, about } = req.body;
   User.findByIdAndUpdate(userId, { name, about }, { new: true, runValidators: true })
-    .then((user) => res.status(OK_SERVER).send({ data: user }))
+    .then((user) => res.status(OK_SERVER).send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') { return res.status(ERROR_VALIDATION).send({ message: 'Validation Error' }); }
       return next(err);
@@ -93,7 +93,7 @@ module.exports.updateAvatarUser = (req, res, next) => {
   const userId = req.user._id;
   const { avatar } = req.body;
   User.findByIdAndUpdate(userId, { avatar }, { new: true, runValidators: true })
-    .then((user) => res.status(OK_SERVER).send({ data: user }))
+    .then((user) => res.status(OK_SERVER).send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') { return next(new ValidationError('Data is not corected')); }
       return next(err);

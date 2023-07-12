@@ -57,7 +57,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
         onChange={handleChangeDescription}
         value={description || ""}
         id="about-me-input"
-        name="aboutme"
+        name="about"
         type="text"
         placeholder="О себе"
         required

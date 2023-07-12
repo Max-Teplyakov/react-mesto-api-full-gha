@@ -2,8 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const { celebrate, Joi } = require('celebrate');
 const { errors } = require('celebrate');
-const NotFoundError = require('./errors/NotFoundError');
 const cors = require('cors');
+const NotFoundError = require('./errors/NotFoundError');
 
 const app = express();
 

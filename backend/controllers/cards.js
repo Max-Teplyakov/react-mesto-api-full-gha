@@ -13,7 +13,7 @@ module.exports.createCard = (req, res, next) => {
   const { name, link } = req.body;
   const userId = req.user._id;
   Card.create({ name, link, owner: userId })
-    .then((card) => res.status(OK_SERVER).send({ data: card }))
+    .then((card) => res.status(OK_SERVER).send(card))
     .catch((err) => {
       if (err.name === 'ValidationError') { return next(new ValidationError('Error Data')); }
       return next(err);
@@ -21,7 +21,7 @@ module.exports.createCard = (req, res, next) => {
 };
 
 module.exports.getCards = (req, res, next) => Card.find({})
-  .then((card) => res.status(OK_SERVER).send({ data: card }))
+  .then((card) => res.status(OK_SERVER).send(card))
   .catch(next);
 
 module.exports.deleteCard = (req, res, next) => {
@@ -34,9 +34,9 @@ module.exports.deleteCard = (req, res, next) => {
       if (card.owner.toString() !== req.user._id) {
         throw new ForbiddenError('You have no rights');
       }
-      Card.findByIdAndRemove(cardId)
+      return Card.findByIdAndRemove(cardId)
         .then((user) => {
-          res.status(OK_SERVER).send({ data: user });
+          res.status(OK_SERVER).send(user);
         });
     })
     .catch((err) => {
@@ -50,11 +50,12 @@ module.exports.likeCard = (req, res, next) => Card.findByIdAndUpdate(
   { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
   { new: true },
 )
+  .populate(['likes', 'owner'])
   .then((card) => {
     if (!card) {
       throw new NotFoundError('Card not found');
     }
-    res.send({ data: card });
+    res.send(card);
   })
   .catch((err) => {
     if (err.name === 'CastError') { return next(new ValidationError('Error Data')); }
@@ -70,7 +71,7 @@ module.exports.disLikeCard = (req, res, next) => Card.findByIdAndUpdate(
     if (!card) {
       throw new NotFoundError('Card not found');
     }
-    res.send({ data: card });
+    res.send(card);
   })
   .catch((err) => {
     if (err.name === 'CastError') { return next(new ValidationError('Error Data')); }

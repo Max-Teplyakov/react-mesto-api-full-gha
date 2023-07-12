@@ -48,10 +48,6 @@ function App() {
       .catch((err) => console.log(err));
   }, []);
 
-  useEffect(() => {
-    handleTokenCheck();
-  }, []);
-
   const handleTokenCheck = () => {
     const jwt = localStorage.getItem("token");
     if (jwt) {
@@ -59,7 +55,7 @@ function App() {
         .checkToken(jwt)
         .then((res) => {
           if (res) {
-            setUserEmail(res.data.email);
+            setUserEmail(res.email);
             setLoggedIn(true);
             navigate("/main", { replace: true });
           }
@@ -69,6 +65,10 @@ function App() {
         });
     }
   };
+
+  useEffect(() => {
+    handleTokenCheck();
+  }, []);
 
   function handleLogin(password, email, setFormValue) {
     auth
@@ -142,7 +142,7 @@ function App() {
   }
 
   const handleCardLike = (card) => {
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
+    const isLiked = card.likes.some((id) => id === currentUser._id);
     api
       .changeLikeCardStatus(card._id, isLiked)
       .then((newCard) => {
