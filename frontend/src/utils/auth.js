@@ -1,4 +1,4 @@
-export const BASE_URL = "api.mestotmax.nomoredomains.work";
+export const BASE_URL = "http://mestotmax.nomoredomains.work";
 
 const getResponseData = (res) => {
   if (!res.ok) {

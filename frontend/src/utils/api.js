@@ -114,5 +114,5 @@ export default class Api {
 }
 
 export const api = new Api({
-  baseUrl: "api.mestotmax.nomoredomains.work",
+  baseUrl: "http://mestotmax.nomoredomains.work",
   });
