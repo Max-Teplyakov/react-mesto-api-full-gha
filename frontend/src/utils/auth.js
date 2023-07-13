@@ -1,4 +1,4 @@
-export const BASE_URL = "http://mestotmax.nomoredomains.work";
+export const BASE_URL = "http://localhost:3000";
 
 const getResponseData = (res) => {
   if (!res.ok) {
