@@ -1,5 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
+// eslint-disable-next-line import/no-extraneous-dependencies
+const bodyParser = require('body-parser');
 const { celebrate, Joi } = require('celebrate');
 const { errors } = require('celebrate');
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -24,7 +26,8 @@ mongoose
   .then(() => {
     console.log('connected bd');
   });
-
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(requestLogger);
 
 app.post(
