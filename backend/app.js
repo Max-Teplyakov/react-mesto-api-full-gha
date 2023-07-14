@@ -7,10 +7,10 @@ const cors = require('cors');
 const NotFoundError = require('./errors/NotFoundError');
 
 const app = express();
-
 const auth = require('./middlewares/auth');
 const routes = require('./routes/index');
 const { createUser, login } = require('./controllers/users');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { PORT = 3000 } = process.env;
 app.use(cors());
@@ -24,6 +24,8 @@ mongoose
   .then(() => {
     console.log('connected bd');
   });
+
+app.use(requestLogger);
 
 app.post(
   '/signin',
@@ -61,6 +63,7 @@ app.post(
 app.use(auth);
 
 app.use(routes);
+app.use(errorLogger);
 app.use((req, res, next) => {
   next(new NotFoundError('Error Server'));
 });
