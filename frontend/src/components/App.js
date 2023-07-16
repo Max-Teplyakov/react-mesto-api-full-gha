@@ -47,7 +47,9 @@ function App() {
       })
       .catch((err) => console.log(err));
   }, []);
-
+  useEffect(() => {
+    handleTokenCheck();
+  }, []);
   const handleTokenCheck = () => {
     const jwt = localStorage.getItem("token");
     if (jwt) {
@@ -66,21 +68,22 @@ function App() {
     }
   };
 
-  useEffect(() => {
-    handleTokenCheck();
-  }, []);
 
   function handleLogin(password, email, setFormValue) {
     auth
       .login(password, email)
       .then((data) => {
         if (data.token) {
+          handleTokenCheck();
           setFormValue({ email: "", password: "" });
           setLoggedIn(true);
           navigate("/main", { replace: true });
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        setIsStatusInfoTooltip(false);
+      })
   }
 
   function handleRegistration(email, password) {
