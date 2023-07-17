@@ -46,10 +46,12 @@ function App() {
         setCards(card);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [loggedIn]);
+
   useEffect(() => {
     handleTokenCheck();
   }, []);
+
   const handleTokenCheck = () => {
     const jwt = localStorage.getItem("token");
     if (jwt) {
@@ -83,6 +85,7 @@ function App() {
       .catch((err) => {
         console.log(err);
         setIsStatusInfoTooltip(false);
+        setIsInfoTooltipPopupOpen(true)
       })
   }
 
